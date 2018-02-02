@@ -1,25 +1,28 @@
 /*
-ADXL335
-note:vcc-->5v ,but ADXL335 Vs is 3.3V
-The circuit:
-      5V: VCC
-analog 1: x-axis
-analog 2: y-axis
-analog 3: z-axis
+ * Thomas Hall
+ * Cristina Guzman-Moumtzis
+ * 
+ * ADXL335
+ * note:vcc-->5v ,but ADXL335 Vs is 3.3V
+ * The circuit:
+ *       5V: VCC
+ * analog 1: x-axis
+ * analog 2: y-axis
+ * analog 3: z-axis
 */
 
 // declare pins
-const int xpin = 1;                  // x-axis of the accelerometer
-const int ypin = 2;                  // y-axis
-const int zpin = 3;                  // z-axis (only on 3-axis models)
+const int xpin = 1;      // x-axis of the accelerometer
+const int ypin = 2;      // y-axis
+const int zpin = 3;      // z-axis (only on 3-axis models)
 
 // defines 
-#define BUFFER_SIZE 3
+#define BUFFER_SIZE 3   // size of our buffer of input data
 
 // globals
-int delayTime;
-int k;
-float buf[BUFFER_SIZE];
+int delayTime;          // global variable for delay time
+int k;                  // counter for buffer
+float buf[BUFFER_SIZE]; // buffer of input data
 
 void setup(){
   // initialize the serial communications:
@@ -64,7 +67,7 @@ void loop(){
   delay(delayTime);
 }
 
-// calculations for arm movement
+// read data and perform calculations for arm movement
 float readValues(){
   
   int x = analogRead(xpin);  //read from xpin 
@@ -76,9 +79,9 @@ float readValues(){
   float fz = (float)((z - 340)/68*9.8);
 
   return abs(fx) + abs(fy) + abs(fz);
-
 }
 
+// Print function for debug purposses
 void printValues(){
   int x = analogRead(xpin);  //read from xpin
  
