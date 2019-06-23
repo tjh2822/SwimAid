@@ -1,7 +1,8 @@
 #include <Wire.h>
 #include <SPI.h>
 #include <Adafruit_LSM9DS1.h>
-#include <Adafruit_Sensor.h>  // not used in this demo but required!
+#include <Adafruit_Sensor.h>
+#include "vector.h"
 
 // i2c
 Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1();
@@ -12,10 +13,16 @@ Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1();
 #define LSM9DS1_XGCS 6
 #define LSM9DS1_MCS 5
 // You can also use software SPI
-//Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1(LSM9DS1_SCK, LSM9DS1_MISO, LSM9DS1_MOSI, LSM9DS1_XGCS, LSM9DS1_MCS);
+// Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1(LSM9DS1_SCK, LSM9DS1_MISO, LSM9DS1_MOSI, LSM9DS1_XGCS, LSM9DS1_MCS);
 // Or hardware SPI! In this case, only CS pins are passed in
-//Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1(LSM9DS1_XGCS, LSM9DS1_MCS);
+// Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1(LSM9DS1_XGCS, LSM9DS1_MCS);
 
+int t = 0;          // time
+int dt = 200;       // Timestep
+int pos = 50;       // position
+int velocity = 5;   // velocity
+int eulercomp1 = 50;// For comparison with Euler integration
+int eulercomp2 = 5; // For comparison with Euler integration
 
 void setupSensor()
 {
@@ -58,6 +65,9 @@ void setup()
 
   // helper to just set the default scaling we want, see above!
   setupSensor();
+
+  Serial.print("Initial position: "); Serial.print(pos); 
+  Serial.print(". Velocity: "); Serial.print(velocity); Serial.println(".");
 }
 
 void loop() 
@@ -80,6 +90,10 @@ void loop()
   Serial.print("Gyro X: "); Serial.print(g.gyro.x);   Serial.print(" dps");
   Serial.print("\tY: "); Serial.print(g.gyro.y);      Serial.print(" dps");
   Serial.print("\tZ: "); Serial.print(g.gyro.z);      Serial.println(" dps");
+
+  // Runge Katta 4th order derivation
+  t += dt;
+
 
   Serial.println();
   delay(200);
