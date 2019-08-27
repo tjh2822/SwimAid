@@ -22,7 +22,6 @@ void setup() {
   setupMPU();                     // set up the MPU accelrometer and gyroscope
 }
 
-
 void loop() {
   recordAccelRegisters();         // get the data
   recordGyroRegisters();          // get the data
